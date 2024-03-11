@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MFast(DEV)</string>
+<!--    <string moduleConfig="true" name="CodePushDeploymentKey">iMFvzv8v6Wifk8EHYrqWWrSVh-uYhWQzxWolc</string>-->
+    <string name="deeplink_scheme">mfastmobiledev</string>
+</resources>
