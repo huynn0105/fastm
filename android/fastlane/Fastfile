@@ -1,0 +1,102 @@
+# Customize this file, documentation can be found here:
+# https://docs.fastlane.tools/actions/
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.66.2"
+
+default_platform :android
+
+platform :android do
+  def get_build_version(realse_notes)
+    build_number = File.read("../version_code.properties")
+    @result = "(#{build_number}) 
+#{realse_notes}"
+  end
+
+  before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+    @result = ''
+    @envi = 'Fabric'
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do |values|
+
+    emails = values[:test_email] ? values[:test_email] : nil
+    groups = values[:test_email] ? nil : ['mfast-android']
+    release_notes = values[:release_notes] ? values[:release_notes] : 'Distributed with fastlane'
+    
+  gradle(task: "assembleRelease")
+
+ #   crashlytics(api_token: '0c7532ab061be1039a2892e68d90c0f2e9bf305e',
+ #        build_secret: '10cd89173eb41604274078a3d358074d77e5e7110dcba8f142e82d70bbb104cb',
+ #              emails: emails,
+ #              groups: groups,
+ #               notes: release_notes,
+ #       notifications: true)
+
+         firebase_app_distribution(
+            app: "1:903499824003:android:176e2041e9b6e7684314b6",
+            apk_path: "/Volumes/SSD/Digipay/mfast-app-1/android/app/build/outputs/apk/release/app-release.apk",
+            groups: 'digitel',
+            release_notes: values[:note] ? values[:note] : 'update mfast',
+            firebase_cli_path: "/usr/local/bin/firebase"
+         )
+   
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+
+    get_build_version(release_notes)
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :production do |values|
+
+    @envi = 'Google Play Store'
+    
+    track = values[:track] ? values[:track] : "alpha"
+    
+    gradle(task: "bundleRelease")
+    
+    supply(
+      package_name: "com.digipay.mfast",
+      json_key: "./app/playstore_key.json",
+      aab: "./app/build/outputs/bundle/release/app.aab",
+      track: track,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+
+    get_build_version()
+  end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    telegram(text: "
+    SUCCESS - Android #{@envi} - #{@result}")
+  end
+
+  error do |lane, exception|
+    telegram(text: "
+    FAIL - Android #{@envi}
+    exception: #{exception.to_s}")
+  end
+end
+
+# More information about multiple platforms in fastlane: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded.
+# Learn more at https://docs.fastlane.tools/#metrics

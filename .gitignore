@@ -1,0 +1,89 @@
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Ruby / CocoaPods
+ios/Pods/
+/vendor/bundle/
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/Fastfile
+
+
+# crashlytics 
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+
+# ios build number
+# ios/fastlane/build_number.txt
+
+# firebase config
+ios/mfast/GoogleService-Info-Prod.plist
+ios/mfast/GoogleService-Info-Staging.plist
+android/app/google-services-prod.json
+android/app/google-services-staging.json
+
+# android version code
+#android/version_code.properties
+
+# vscode project
+.vscode
+
+#jest result
+coverage/*
+test-report.html
+
+#yarn
+ios/yarn.lock
+.env
+.env.*
+/app/submodules/firebase/NativeUtil.js

@@ -1,0 +1,81 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+  ext {
+    buildToolsVersion = "29.0.3"
+    minSdkVersion = 23
+    compileSdkVersion = 33
+    targetSdkVersion = 33
+    androidXCore = "1.6.0"
+    ndkVersion = "23.1.7779620"
+  }
+  repositories {
+    google()
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("com.android.tools.build:gradle:4.0.1")
+    classpath 'com.google.gms:google-services:4.3.4'
+    classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
+
+    // NOTE: Do not place your application dependencies here; they belong
+    // in the individual module build.gradle files
+  }
+}
+
+def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+def storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
+
+allprojects {
+  configurations.all {
+    resolutionStrategy {
+        // Remove this override in 0.66, as a proper fix is included in react-native itself.
+        force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+    }
+  }
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    google()
+    jcenter()
+    maven {
+      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+      url("$rootDir/../node_modules/react-native/android")
+    }
+    maven {
+      url("$rootDir/../node_modules/react-native-vnpay-merchant/android/repo")
+    }
+    maven {
+      // Android JSC is installed from npm
+      url("$rootDir/../node_modules/jsc-android/dist")
+    }
+    maven {
+      url 'https://maven.google.com'
+    }
+    // image crop picker
+    maven {
+      url "https://jitpack.io"
+    }
+    maven {
+      url "https://sdk.smartlook.com/android/release"
+    }
+    maven {
+      url "$rootDir/../forked_node_modules/flutter_module/build/host/outputs/repo"
+    }
+    maven {
+      url "$storageUrl/download.flutter.io"
+    }
+  }
+}
+
+subprojects {
+  afterEvaluate {project ->
+   if (project.hasProperty("android")) {
+      android {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion rootProject.ext.buildToolsVersion
+      }
+    }
+  }
+}

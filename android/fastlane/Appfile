@@ -1,0 +1,3 @@
+# https://docs.fastlane.tools/actions/supply/#setup
+# json_key_file "./app/appstore_key.json"
+# package_name "com.digipay.mfast"

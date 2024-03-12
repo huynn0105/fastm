@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>vi</string>
+	<key>CFBundleDisplayName</key>
+	<string>MFast(DEV)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mfastmobiledev</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1637485106686587</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>zalo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>zalo-3061511678273864526</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>join.mfast.vn</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mfastmobile.app.link</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CodePushDeploymentKey</key>
+	<string>xU2d07j99FwxILDhrBoadwuShbsMPorw4W36j</string>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<true/>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<true/>
+	<key>FacebookAppID</key>
+	<string>1637485106686587</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookClientToken</key>
+	<string>91acbb352ce698ce3fc816e06885b628</string>
+	<key>FacebookDisplayName</key>
+	<string>MFast</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<true/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+		<string>fb</string>
+        <string>sms</string>
+        <string>tel</string>
+        <string>googlechromes</string>
+        <string>comgooglemaps</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>MoEngage</key>
+	<dict>
+		<key>MoEngage_APP_ID</key>
+		<string>9QBXCRQ6ZYJBYYXZQMZAG3UM_DEBUG</string>
+	</dict>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://appsflyer-skadnetwork.com/</string>
+	<key>MoEngageAppDelegateProxyEnabled</key>
+	<false/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>MFast truy cập Apple Music</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>MFast truy cập Bluetooth</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>MFast truy cập Calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>MFast truy cập Camera để bạn có thể cập nhật hình ảnh trang cá nhân</string>
+	<key>NSContactsUsageDescription</key>
+	<string>MFast cần quyền danh bạ để hoàn thiện hồ sơ</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you quick and secure access to your account.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>MFast truy cập định vị để thực hiện cập nhật địa điểm và sử dụng dịch vụ khác nhanh chóng và chính xác. Vui lòng cho chúng tôi biết địa điểm của bạn.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>MFast truy cập định vị để thực hiện cập nhật địa điểm và sử dụng dịch vụ khác nhanh chóng và chính xác. Vui lòng cho chúng tôi biết địa điểm của bạn.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>MFast truy cập định vị để thực hiện cập nhật địa điểm và sử dụng dịch vụ khác nhanh chóng và chính xác. Vui lòng cho chúng tôi biết địa điểm của bạn.</string>
+	<key>NSMainNibFile</key>
+	<string>LaunchScreen</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MFast truy cập Microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MFast truy cập Motion</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MFast truy cập Photos để bạn có thể cập nhật hình ảnh trang cá nhân</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>MFast truy cập Speech</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>MFast muốn sử dụng dữ liệu về bạn cho mục đích thống kê nhằm đưa ra gợi ý sử dụng MFast phù hợp nhất dành cho bạn</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>MFast truy cập kho ảnh của bạn để lưu trữ</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>MFastVN-Bold.ttf</string>
+		<string>MFastVN-BoldItalic.ttf</string>
+		<string>MFastVN-Italic.ttf</string>
+		<string>MFastVN-Light.ttf</string>
+		<string>MFastVN-LightItalic.ttf</string>
+		<string>MFastVN-Regular.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>MFastVN-Medium.ttf</string>
+		<string>MFastVN-MediumItalic.ttf</string>
+		<string>MFastVN-SemiBold.ttf</string>
+		<string>MFastVN-SemiBoldItalic.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDarkContent</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>branch_app_domain</key>
+	<string>mfastmobile.app.link</string>
+	<key>branch_key</key>
+	<dict>
+		<key>live</key>
+		<string>key_live_cp9Nwfcj1wkk4uCaarITWgihtFdmKe3r</string>
+		<key>test</key>
+		<string>key_test_lfYUtphp3Dfa1ssjnvIT6feitxciIaZU</string>
+	</dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
+</dict>
+</plist>

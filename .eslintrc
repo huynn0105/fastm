@@ -1,0 +1,72 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["flowtype", "jest"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": false
+    }
+  },
+
+  "extends": "airbnb",
+
+  "rules": {
+    "arrow-body-style": 0,
+    "arrow-parens": 0,
+    "brace-style": 0,
+    "class-methods-use-this": 0,
+    "global-require": 0,
+    "indent": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/prefer-default-export": 0,
+    "no-console": 1,
+    "no-use-before-define": 0,
+    "no-restricted-globals": 0,
+    "no-trailing-spaces": 0,
+    "object-curly-newline": 0,
+    "padded-blocks": 0,
+    "prefer-destructuring": 0,
+    "react/jsx-curly-brace-presence": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-indent": 0,
+    "react/no-typos": 0,
+    "react/prefer-stateless-function": 0,
+    "react/prop-types": 0,
+    "react/require-default-props": 0,
+    "import/no-dynamic-require": 0,
+
+    "flowtype/define-flow-type": 1,
+    "flowtype/use-flow-type": 1,
+    "flowtype/valid-syntax": 1,
+
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
+    "no-lonely-if": 0,
+    "no-underscore-dangle": 0,
+    "prettier/prettier": 0,
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "always-multiline"
+      }
+    ],
+    "template-curly-spacing": "off",
+    "no-mixed-operators": "off",
+    "react/sort-comp": 0,
+    "function-paren-newline": 0,
+    "no-useless-return": 0
+  }
+}
