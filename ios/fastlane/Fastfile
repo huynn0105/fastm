@@ -1,0 +1,116 @@
+fastlane_version "2.56.0"
+
+default_platform :ios
+
+platform :ios do
+
+  def get_build_version(release_notes)
+    current_version = get_version_number(xcodeproj: 'mfast')
+    build_number = 0
+    File.open('build_number.txt', 'r') do |f1|
+      build_number = f1.gets.to_i
+    end
+    @result = " #{current_version}(#{build_number})
+#{release_notes}"
+  end
+
+  before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+    @result = ''
+    @envi = 'Fabric'
+  end
+
+  # --------------------------------------------------
+  # Read & Increase build number
+  # --------------------------------------------------
+  build_number = 0
+  File.open('build_number.txt', 'r') do |f1|
+    build_number = f1.gets.to_i
+  end
+
+  build_number = build_number + 1 
+
+  File.open('build_number.txt', 'w') do |f2|
+    f2.puts build_number
+  end
+
+  # --------------------------------------------------
+  # Build for Fabric Beta
+  # --------------------------------------------------
+  
+  desc "Submit a new build to Crashlytics Beta"
+  lane :beta do |values|
+    
+    increment_build_number(
+      build_number: build_number
+    )
+    
+    gym(scheme: 'mfast', export_method: 'ad-hoc', include_bitcode: false
+  #  export_options: {
+  #    provisioningProfiles: {
+  #      "com.digitel.mfastdev": "AppayDev_AhHoc.mobileprovision",
+  #      "com.digitel.mfast": "Appay_AdHoc.mobileprovision"
+  #    }
+  #  }
+    )
+
+    emails = values[:test_email] ? values[:test_email] : nil
+    groups = values[:test_email] ? nil : ['mfast-ios']
+    release_notes = values[:release_notes] ? values[:release_notes] : 'Distributed with fastlane'
+
+#    crashlytics(api_token: '0c7532ab061be1039a2892e68d90c0f2e9bf305e',
+#            build_secret: '10cd89173eb41604274078a3d358074d77e5e7110dcba8f142e82d70bbb104cb',
+#                   emails: emails,
+#                   groups: groups,
+#                    notes: release_notes,
+#            notifications: true)
+
+        firebase_app_distribution(
+            app: "1:903499824003:ios:d88206ec6c06a47a4314b6",
+            groups: "digitel",
+            release_notes: values[:note] ? values[:note] : 'update mfast',
+            firebase_cli_path: "/usr/local/bin/firebase"
+        )
+    
+    # value for telegram
+    get_build_version(release_notes)
+  end
+
+  # --------------------------------------------------
+  # Build for AppStore
+  # --------------------------------------------------
+
+  desc "Submit a new build to Apple Store TestFlight"
+  lane :production do
+
+    @envi = 'Apple Store'
+    
+    increment_build_number
+
+    gym(scheme: "mfast")
+    
+    appstore(
+      username: "anhtu.khtn@gmail.com",
+      team_id: "118882276",
+      skip_screenshots: "true",
+      force: "true",
+    )
+
+    # value for telegram
+    get_build_version() 
+
+  end
+
+  after_all do |lane|
+    telegram(text: "
+    SUCCESS - iOS #{@envi} - #{@result}")
+  end
+
+  error do |lane, exception|
+    telegram(text: "
+    FAIL - iOS #{@envi}
+    exception: #{exception.to_s}")
+  end
+
+
+end

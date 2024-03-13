@@ -1,0 +1,201 @@
+import { StyleSheet } from 'react-native';
+import { fonts } from '../../constants/configs';
+import Colors from '../../theme/Color';
+
+export default StyleSheet.create({
+  safaView: {
+    flex: 1,
+    backgroundColor: Colors.neutral5,
+  },
+  wrapper: {
+    flex: 1,
+    backgroundColor: Colors.neutral5,
+  },
+  formWrapper: {
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 7,
+    marginBottom: 24,
+    borderRadius: 12,
+    backgroundColor: Colors.primary5,
+  },
+  titleText: {
+    color: Colors.gray5,
+    fontStyle: 'normal',
+    fontSize: 14,
+    marginHorizontal: 16,
+    marginTop: 12,
+    height: 20,
+  },
+  textFieldLable: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: Colors.gray1,
+  },
+  disableTextField: {
+    opacity: 0.4,
+  },
+  textFieldContainerStyle: {
+    flex: 0,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    fontFamily: fonts.regular,
+    color: Colors.primary4,
+  },
+  buttonWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    borderRadius: 24,
+    height: 50,
+    backgroundColor: Colors.primary2,
+  },
+  disableButton: {
+    borderRadius: 24,
+    height: 50,
+    color: Colors.neutral3,
+  },
+  buttonLabel: {
+    color: Colors.primary5,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 16,
+    marginHorizontal: 32,
+    marginTop: 14,
+    marginBottom: 11,
+    fontFamily: fonts.medium,
+    height: 24,
+  },
+  disableButtonLabel: {
+    color: Colors.gray5,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 16,
+    marginHorizontal: 32,
+    marginTop: 14,
+    marginBottom: 11,
+    fontFamily: fonts.medium,
+    height: 24,
+  },
+  noteWrapper: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginTop: 16,
+    marginBottom: 30,
+  },
+  note: {
+    color: Colors.gray5,
+    fontStyle: 'normal',
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: 'center',
+    flex: 1,
+  },
+  highlightNote: {
+    color: Colors.sixRed,
+  },
+  emptyContainer: {
+    minHeight: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  emptyTxt: {
+    opacity: 0.6,
+  },
+  listContainer: {
+    flex: 1,
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 24,
+    borderRadius: 12,
+    backgroundColor: Colors.primary5,
+    justifyContent: 'center',
+  },
+  itemContainer: {
+    flexDirection: 'row',
+  },
+  imageItem: {
+    height: 84,
+    width: 84,
+  },
+  contentWraper: {
+    flex: 1,
+    paddingLeft: 12,
+    alignItems: 'flex-start',
+  },
+  labelItem: {
+    color: Colors.gray1,
+    fontStyle: 'normal',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  subContentWraper: {
+    flexDirection: 'row',
+    paddingTop: 4,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  priceItem: {
+    color: Colors.sixRed,
+    fontStyle: 'normal',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  priceCompareItem: {
+    color: Colors.gray5,
+    fontSize: 14,
+    lineHeight: 20,
+    textDecorationLine: 'line-through',
+  },
+  amountLable: {
+    paddingEnd: 8,
+    color: Colors.gray5,
+    fontStyle: 'normal',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  amountValue: {
+    textAlign: 'center',
+    color: Colors.gray1,
+    fontStyle: 'normal',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  dash: {
+    marginBottom: 8,
+    marginTop: 15,
+    position: 'relative',
+  },
+  dashBottom: {
+    marginBottom: 12,
+    marginTop: 19,
+    position: 'relative',
+  },
+  totalPriceWraper: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  totalPriceLabel: {
+    color: Colors.gray5,
+    fontStyle: 'normal',
+    fontSize: 14,
+    lineHeight: 26,
+    marginEnd: 24,
+  },
+  totalPrice: {
+    color: Colors.sixRed,
+    fontStyle: 'normal',
+    fontSize: 18,
+    lineHeight: 26,
+  },
+  delete: {
+    marginLeft: 4,
+  },
+});

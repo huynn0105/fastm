@@ -1,0 +1,7 @@
+app/network/AxiosClient.mock.js
+/node_modules/*
+node_modules/*
+android/*
+/android/*
+ios/*
+/ios/*

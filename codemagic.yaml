@@ -1,0 +1,605 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+# Please review and update values
+
+workflows:
+  android-ios-dev:
+    name: MFast DEV
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_identifier: com.digitel.mfastdev
+      android_signing:
+        - mfast_keystore
+      vars:
+        PACKAGE_NAME: 'com.digipay.mfastdev' # <-- Put your package name here e.g. com.domain.myapp
+        XCODE_WORKSPACE: 'Runner.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: 'develop' # <-- Put the name of your Xcode scheme here
+      xcode: 14.3.1
+      cocoapods: 1.12.1
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'build_rc_*'
+          include: true
+    scripts:
+      #      - name: Set up Android Google Service
+      #        script: |
+      #          cd $CM_BUILD_DIR/android/app/src
+      #          mkdir develop
+      #          cd develop
+      #          touch google-services.json
+      #          echo $FIREBASE_ANDROID_DEVELOP | base64 --decode > google-services.json
+      #      - name: Set up iOS Google Service
+      #        script: |
+      #          cd $CM_BUILD_DIR/ios/Firebase
+      #          mkdir develop
+      #          cd develop
+      #          touch GoogleService-Info.plist
+      #          echo $FIREBASE_IOS_DEVELOP | base64 --decode > GoogleService-Info.plist
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Set iOS build version name
+        script: |
+          cd forked_node_modules/mfast-app/ios
+          BUILD_NAME=`sed -n '/MARKETING_VERSION/{s/MARKETING_VERSION = //;s/;//;s/^[[:space:]]*//;p;q;}' ./Runner.xcodeproj/project.pbxproj`
+          date=$(TZ=Asia/Ho_Chi_Minh date '+%H%M-%d%m%Y')
+          FINAL_BUILD_NAME=$BUILD_NAME-FLUTTER-DEV-$date
+          agvtool new-marketing-version $FINAL_BUILD_NAME
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd forked_node_modules/mfast-app/
+          cd ios && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          cd forked_node_modules/mfast-app/
+          xcode-project use-profiles --warn-only
+      - name: Build iOS release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build ipa --release --export-options-plist ios/export_dev.plist --flavor develop
+      - name: Build Android release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build apk --flavor develop
+
+    artifacts:
+      - forked_node_modules/mfast-app/build/**/outputs/flutter-apk/app-develop-release.apk
+      - forked_node_modules/mfast-app/build/**/outputs/**/mapping.txt
+      - forked_node_modules/mfast-app/build/ios/ipa/*.ipa
+      - forked_node_modules/mfast-app/tmp/xcodebuild_logs/*.log
+      - forked_node_modules/mfast-app/flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+          - dang.duonghai@mfast.vn
+          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: true
+      firebase:
+        firebase_token: 1//0gQiOUrjQhhTTCgYIARAAGBASNwF-L9Irn7e2UZYdXYqgie6eV69p5VrgIaJnm0NoVBt0lTxmTzMPc0tMipYAUVe6YqnPOgF-FgU
+        android:
+          app_id: 1:903499824003:android:176e2041e9b6e7684314b6
+          groups:
+            - digitel
+        ios:
+          app_id: 1:903499824003:ios:d88206ec6c06a47a4314b6
+          groups:
+            - digitel
+  android-dev:
+    name: MFast Android DEV
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        - mfast_keystore
+      vars:
+        PACKAGE_NAME: 'com.digipay.mfastdev' # <-- Put your package name here e.g. com.domain.myapp
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'android_build_rc_*'
+          include: true
+    scripts:
+      - name: Set up Android Google Service
+        script: |
+          cd $CM_BUILD_DIR/forked_node_modules/mfast-app/android/app/src
+          mkdir develop
+          cd develop
+          touch google-services.json
+          echo $FIREBASE_ANDROID_DEVELOP | base64 --decode > google-services.json
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Build Android release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build apk --flavor develop
+
+    artifacts:
+      - forked_node_modules/mfast-app/build/**/outputs/flutter-apk/app-develop-release.apk
+      - forked_node_modules/mfast-app/build/**/outputs/**/mapping.txt
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+          - dang.duonghai@mfast.vn
+          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: true
+      firebase:
+        firebase_token: 1//0gQiOUrjQhhTTCgYIARAAGBASNwF-L9Irn7e2UZYdXYqgie6eV69p5VrgIaJnm0NoVBt0lTxmTzMPc0tMipYAUVe6YqnPOgF-FgU
+        android:
+          app_id: 1:903499824003:android:176e2041e9b6e7684314b6
+          groups:
+            - digitel
+  ios-dev:
+    name: MFast iOS DEV
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_identifier: com.digitel.mfastdev
+      vars:
+        XCODE_WORKSPACE: 'Runner.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: 'develop' # <-- Put the name of your Xcode scheme here
+      xcode: 14.3.1
+      cocoapods: 1.12.1
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      #        - push
+      tag_patterns:
+        - pattern: 'ios_build_rc_*'
+          include: true
+    scripts:
+      #      - name: Set up iOS Google Service
+      #        script: |
+      #          cd $CM_BUILD_DIR/ios/Firebase
+      #          mkdir develop
+      #          cd develop
+      #          touch GoogleService-Info.plist
+      #          echo $FIREBASE_IOS_DEVELOP | base64 --decode > GoogleService-Info.plist
+      - name: Set iOS build version name
+        script: |
+          cd forked_node_modules/mfast-app/ios
+          BUILD_NAME=`sed -n '/MARKETING_VERSION/{s/MARKETING_VERSION = //;s/;//;s/^[[:space:]]*//;p;q;}' ./Runner.xcodeproj/project.pbxproj`
+          date=$(TZ=Asia/Ho_Chi_Minh date '+%H%M-%d%m%Y')
+          FINAL_BUILD_NAME=$BUILD_NAME-FLUTTER-DEV-$date
+          agvtool new-marketing-version $FINAL_BUILD_NAME
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd forked_node_modules/mfast-app/
+          cd ios && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          cd forked_node_modules/mfast-app/
+          xcode-project use-profiles --warn-only
+      - name: Build iOS release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build ipa --release --export-options-plist ios/export_dev.plist --flavor develop
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      #      email:
+      #        recipients:
+      #          - minh.nguyencong@mfast.vn
+      #          - dang.duonghai@mfast.vn
+      #          - viet.vominhquoc@mfast.vn
+      #        notify:
+      #          success: true
+      #          failure: true
+      firebase:
+        firebase_token: 1//0gQiOUrjQhhTTCgYIARAAGBASNwF-L9Irn7e2UZYdXYqgie6eV69p5VrgIaJnm0NoVBt0lTxmTzMPc0tMipYAUVe6YqnPOgF-FgU
+        ios:
+          app_id: 1:513340187653:ios:0b88bb36f673a59bd6e86c
+          groups:
+            - internal
+
+  android-ios-staging:
+    name: MFast Staging
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.digitel.mfaststaging
+      android_signing:
+        - mfast_keystore
+      vars:
+        PACKAGE_NAME: 'com.digipay.mfaststaging' # <-- Put your package name here e.g. com.domain.myapp
+        XCODE_WORKSPACE: 'Runner.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: 'staging' # <-- Put the name of your Xcode scheme here
+        APP_ID: 6446005661
+      xcode: 14.3.1
+      cocoapods: 1.12.1
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'build_staging_*'
+          include: true
+    scripts:
+      - name: Set up Android Google Service
+        script: |
+          cd $CM_BUILD_DIR/forked_node_modules/mfast-app/android/app/src
+          mkdir staging
+          cd staging
+          touch google-services.json
+          echo $FIREBASE_ANDROID_STAGING | base64 --decode > google-services.json
+      - name: Set up iOS Google Service
+        script: |
+          cd $CM_BUILD_DIR/forked_node_modules/mfast-app/ios/Firebase
+          mkdir staging
+          cd staging
+          touch GoogleService-Info.plist
+          echo $FIREBASE_IOS_STAGING | base64 --decode > GoogleService-Info.plist
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Increment build number
+        script: |
+          #!/bin/sh
+          set -e
+          set -x
+          cd forked_node_modules/mfast-app/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number --not-expired "$APP_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd forked_node_modules/mfast-app/
+          cd ios && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          cd forked_node_modules/mfast-app/
+          xcode-project use-profiles --warn-only
+      - name: Build iOS release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build ipa --release --export-options-plist ios/export_stg.plist --flavor staging
+      - name: Build Android release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build apk --flavor staging
+
+    artifacts:
+      - forked_node_modules/mfast-app/build/**/outputs/flutter-apk/app-staging-release.apk
+      - forked_node_modules/mfast-app/build/**/outputs/**/mapping.txt
+      - forked_node_modules/mfast-app/build/ios/ipa/*.ipa
+      - forked_node_modules/mfast-app/tmp/xcodebuild_logs/*.log
+      - forked_node_modules/mfast-app/flutter_drive.log
+    integrations:
+      app_store_connect: MFast
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+      firebase:
+        firebase_token: 1//0gQiOUrjQhhTTCgYIARAAGBASNwF-L9Irn7e2UZYdXYqgie6eV69p5VrgIaJnm0NoVBt0lTxmTzMPc0tMipYAUVe6YqnPOgF-FgU
+        android:
+          app_id: 1:74119051137:android:85d227f5601d19d6a09a80
+          groups:
+            - Digipay
+  android-stag:
+    name: MFast Android STAG
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        - mfast_keystore
+      vars:
+        PACKAGE_NAME: 'com.digipay.mfaststaging' # <-- Put your package name here e.g. com.domain.myapp
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'android_build_staging_*'
+          include: true
+    scripts:
+      - name: Set up Android Google Service
+        script: |
+          cd $CM_BUILD_DIR/forked_node_modules/mfast-app/android/app/src
+          mkdir staging
+          cd staging
+          touch google-services.json
+          echo $FIREBASE_ANDROID_STAGING | base64 --decode > google-services.json
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Build Android release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build apk --flavor staging
+
+    artifacts:
+      - forked_node_modules/mfast-app/build/**/outputs/flutter-apk/app-staging-release.apk
+      - forked_node_modules/mfast-app/build/**/outputs/**/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+          - dang.duonghai@mfast.vn
+          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: true
+      firebase:
+        firebase_token: 1//0gQiOUrjQhhTTCgYIARAAGBASNwF-L9Irn7e2UZYdXYqgie6eV69p5VrgIaJnm0NoVBt0lTxmTzMPc0tMipYAUVe6YqnPOgF-FgU
+        android:
+          app_id: 1:74119051137:android:85d227f5601d19d6a09a80
+          groups:
+            - Digipay
+
+  ios-stag:
+    name: MFast iOS STAG
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.digitel.mfaststaging
+      vars:
+        XCODE_WORKSPACE: 'Runner.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: 'staging' # <-- Put the name of your Xcode scheme here
+        APP_ID: 6446005661
+      xcode: 14.3.1
+      cocoapods: 1.12.1
+      flutter: 3.13.4
+      groups:
+        - firebase
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'ios_build_staging_*'
+          include: true
+    scripts:
+      - name: Set up iOS Google Service
+        script: |
+          cd $CM_BUILD_DIR/forked_node_modules/mfast-app/ios/Firebase
+          mkdir staging
+          cd staging
+          touch GoogleService-Info.plist
+          echo $FIREBASE_IOS_STAGING | base64 --decode > GoogleService-Info.plist
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Increment build number
+        script: |
+          #!/bin/sh
+          set -e
+          set -x
+          cd forked_node_modules/mfast-app/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number --not-expired "$APP_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd forked_node_modules/mfast-app/
+          cd ios && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          cd forked_node_modules/mfast-app/
+          xcode-project use-profiles --warn-only
+      - name: Build iOS release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build ipa --release --build-number=$BUILD_NO --export-options-plist ios/export_stg.plist --flavor staging
+    artifacts:
+      - forked_node_modules/mfast-app/build/ios/ipa/*.ipa
+      - forked_node_modules/mfast-app/tmp/xcodebuild_logs/*.log
+      - forked_node_modules/mfast-app/flutter_drive.log
+    integrations:
+      app_store_connect: MFast
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  android-prod:
+    name: MFast Android PROD
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        - mfast_keystore
+      vars:
+        PACKAGE_NAME: 'com.mfast.consumer' # <-- Put your package name here e.g. com.domain.myapp
+      flutter: 3.13.4
+      groups:
+        - firebase
+    #    triggering:
+    #      events:
+    #        - push
+    #      branch_patterns:
+    #        - pattern: 'release/prod_env'
+    #          include: true
+    #          source: true
+    scripts:
+      - name: Set up Android Google Service
+        script: |
+          cd $CM_BUILD_DIR/android/app/src
+          mkdir production
+          cd production
+          touch google-services.json
+          echo $FIREBASE_ANDROID_PRODUCTION | base64 --decode > google-services.json
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/forked_node_modules/mfast-app/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter pub get
+      - name: Build Android release
+        script: |
+          cd forked_node_modules/mfast-app/
+          flutter build appbundle --flavor production
+    #  LATEST_GOOGLE_PLAY_BUILD_NUMBER=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME")
+    #  if [ -z LATEST_BUILD_NUMBER ]; then
+    #  # fallback in case no build number was found from google play. Alternatively, you can `exit 1` to fail the build
+    #  UPDATED_BUILD_NUMBER=$BUILD_NUMBER
+    #  else
+    #  UPDATED_BUILD_NUMBER=$(($LATEST_GOOGLE_PLAY_BUILD_NUMBER + 1))
+    #  fi
+    #  cd android
+    #  ./gradlew bundleRelease \
+    #  -PversionCode=$UPDATED_BUILD_NUMBER \
+    #  -PversionName=1.0.$UPDATED_BUILD_NUMBER
+
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - minh.nguyencong@mfast.vn
+        #          - dang.duonghai@mfast.vn
+        #          - viet.vominhquoc@mfast.vn
+        notify:
+          success: true
+          failure: false
+  #        google_play:
+  #          credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+  #          track: alpha   # Any default or custom track that is not in ‘draft’ status
+
+  ios-prod:
+    name: MFast iOS PROD
+    max_build_duration: 35
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mfast.consumer
+      vars:
+        XCODE_WORKSPACE: 'Runner.xcworkspace' # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: 'production' # <-- Put the name of your Xcode scheme here
+        APP_ID: 1494079210 # <-- Put the app id number here. This is found in App Store Connect > App > General > App Information
+      xcode: 14.3.1
+      cocoapods: 1.12.1
+      flutter: 3.13.4
+      groups:
+        - firebase
+    scripts:
+      - name: Pre-build
+        script: |
+          touch .env
+          echo $ENV_PRODUCTION_FILE | base64 --decode > .env.prod
+          echo $FIREBASE_IOS_PRODUCTION | base64 --decode > $CM_BUILD_DIR/ios/$XCODE_SCHEME/GoogleService-Info-Prod.plist
+          yarn flutter:ios
+      - name: Copy NativeUtil
+        script: |
+          cd app/submodules/firebase
+          mv NativeUtil.mobile.js NativeUtil.js
+      - name: Increment build number
+        script: |
+          #!/bin/sh
+          set -e
+          set -x
+          cd forked_node_modules/mfast-app/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number --not-expired "$APP_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Install dependencies
+        script: |
+          rm yarn.lock
+          rm -rf node_modules
+          yarn install
+          yarn jetify
+          yarn config:ios
+          ./prepare_build.sh
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles --warn-only
+      - name: Build iOS release
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --archive-flags="-destination 'generic/platform=iOS'"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    integrations:
+      app_store_connect: MFast
+    publishing:
+      #      email:
+      #        recipients:
+      #          - minh.nguyencong@mfast.vn
+      #          - dang.duonghai@mfast.vn
+      #          - viet.vominhquoc@mfast.vn
+      #        notify:
+      #          success: true
+      #          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

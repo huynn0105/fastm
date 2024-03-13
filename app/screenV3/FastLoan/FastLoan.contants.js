@@ -1,0 +1,8 @@
+export const EX_ENUM = {};
+
+export const KEY_PAGE = {
+  CHECK_PROFILE: 'CHECK_PROFILE',
+  KYC: 'KYC',
+  CUSTOMER_PROFILE: 'CUSTOMER_PROFILE',
+  OTHER_PROFILE: 'OTHER_PROFILE',
+};
